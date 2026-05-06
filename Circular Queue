@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXQUEUE 5
+#define TRUE 1
+#define FALSE 0
+
+struct queue {
+    int items[MAXQUEUE];
+    int front, rear;
+};
+
+struct queue q;
+
+// Function to check if queue is empty
+int empty(struct queue *pq) {
+    return (pq->front == pq->rear) ? TRUE : FALSE;
+}
+
+// Function to insert element
+void insert(struct queue *pq, int x) {
+    if (pq->rear == MAXQUEUE - 1)
+        pq->rear = 0;
+    else
+        pq->rear++;
+
+    if (pq->rear == pq->front) {
+        printf("Queue Overflow\n");
+        exit(1);
+    }
+
+    pq->items[pq->rear] = x;
+}
+
+// Function to delete element
+int remove_q(struct queue *pq) {
+    if (empty(pq)) {
+        printf("Queue Underflow\n");
+        exit(1);
+    }
+
+    if (pq->front == MAXQUEUE - 1)
+        pq->front = 0;
+    else
+        pq->front++;
+
+    return pq->items[pq->front];
+}
+
+// Function to display queue
+void display(struct queue *pq) {
+    int i;
+
+    if (empty(pq)) {
+        printf("Queue is Empty\n");
+        return;
+    }
+
+    printf("Queue elements: ");
+
+    i = pq->front;
+    while (i != pq->rear) {
+        if (i == MAXQUEUE - 1)
+            i = 0;
+        else
+            i++;
+
+        printf("%d ", pq->items[i]);
+    }
+    printf("\n");
+}
+
+// Main function with switch
+int main() {
+    int choice, value;
+
+    q.front = q.rear = MAXQUEUE - 1;
+
+    while (1) {
+        printf("\n--- Circular Queue Menu ---\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                insert(&q, value);
+                break;
+
+            case 2:
+                value = remove_q(&q);
+                printf("Deleted element: %d\n", value);
+                break;
+
+            case 3:
+                display(&q);
+                break;
+
+            case 4:
+                exit(0);
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+
+    return 0;
+}
+
+
